@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-CONFIG = console
+CONFIG += console
 
 QT =
 
