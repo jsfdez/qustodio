@@ -11,15 +11,15 @@ public:
     class Connection : public boost::enable_shared_from_this<Connection>
     {
     public:
-        typedef boost::shared_ptr<Connection> Pointer;
+		Connection(boost::asio::io_service& ios);
+
+		typedef boost::shared_ptr<Connection> Pointer;
 
         static Connection* Create(boost::asio::io_service& ios);
 
         boost::asio::ip::tcp::socket& GetSocket();
-
-    private:
-        Connection(boost::asio::io_service& ios);
-
+    
+	private:
         boost::asio::ip::tcp::socket m_socket;
     };
 

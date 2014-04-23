@@ -24,8 +24,7 @@ bool Server::StartListening(uint16_t port)
         return false;
 
 //    auto connection = Connection::Create(m_ios);
-    m_pendingConnection = boost::make_shared<Connection>(
-                Connection::Create(m_ios));
+    m_pendingConnection = boost::make_shared<Connection>(m_ios);
 //    auto callback = boost::bind(&Server::HandleAccept, this, connection,
 //                      boost::asio::placeholders::error);
     m_acceptor.async_accept(m_pendingConnection->GetSocket(),

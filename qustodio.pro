@@ -1,5 +1,7 @@
 TEMPLATE = subdirs
 
+CONFIG -= qt
+
 QT =
 
 # Directories

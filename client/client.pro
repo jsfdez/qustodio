@@ -1,10 +1,14 @@
 TEMPLATE = app
 
+CONFIG = console
+
 QT =
 
 OBJECTS_DIR = .o
 DESTDIR = ../bin
 
-LIBS += L../lib
+!win32 {
+	LIBS += L../lib
+}
 
 SOURCES += client_main.cpp
