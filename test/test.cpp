@@ -17,7 +17,7 @@ BOOST_AUTO_TEST_CASE(SpawnServer)
         boost::asio::io_service ios;
         Server server(ios);
         BOOST_CHECK(server.StartListening(12345));
-        return ios.run();
+        return ios.run_one();
     });
     std::future<int> future = task.get_future();
     std::thread thread(std::move(task));
@@ -33,6 +33,7 @@ BOOST_AUTO_TEST_CASE(SpawnServer)
         socket.close();
         socket.connect(*it++, error);
     }
+    socket.close();
     BOOST_CHECK(!error);
     thread.join();
 }

@@ -8,12 +8,12 @@
 class Server
 {
 public:
-    class Connection : public boost::enable_shared_from_this<Connection>
+    class Connection
     {
     public:
 		Connection(boost::asio::io_service& ios);
 
-		typedef boost::shared_ptr<Connection> Pointer;
+		typedef std::shared_ptr<Connection> Pointer;
 
         static Connection* Create(boost::asio::io_service& ios);
 
@@ -28,8 +28,8 @@ public:
     bool StartListening(uint16_t port);
 
 private:
-//    void HandleAccept(Connection* connection,
-//                      const boost::system::error_code& ec);
+    void AsyncAccept();
+
     void HandleAccept(const boost::system::error_code& ec);
 
     boost::asio::io_service& m_ios;
