@@ -23,30 +23,15 @@ bool Server::StartListening(uint16_t port)
     if (ec)
         return false;
 
-//    auto connection = Connection::Create(m_ios);
     m_pendingConnection = boost::make_shared<Connection>(m_ios);
     auto callback = boost::bind(&Server::HandleAccept, this,
                       boost::asio::placeholders::error);
-//    m_acceptor.async_accept(m_pendingConnection->GetSocket(),
-//                            &Server::HandleAccept);
-    std::cout << __FUNCTION__ << "Waiting for incoming connections";
     m_acceptor.async_accept(m_pendingConnection->GetSocket(), callback);
     return true;
 }
 
-//void Server::HandleAccept(Server::Connection* connection,
-//                          const boost::system::error_code& ec)
-//{
-//    std::cout << "hello world!!" << std::endl;
-//    if (!ec)
-//    {
-//        m_connections.push_back(connection->shared_from_this());
-//    }
-//}
-
 void Server::HandleAccept(const boost::system::error_code& ec)
 {
-    std::cout << "hello world!!" << std::endl;
     if (!ec)
     {
         m_connections.push_back(m_pendingConnection);
