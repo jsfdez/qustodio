@@ -5,13 +5,17 @@
 class Connection
 {
 public:
-    Connection(boost::asio::io_service& ios);
-
     typedef std::shared_ptr<Connection> Pointer;
 
-    static Connection* Create(boost::asio::io_service& ios);
+    Connection(boost::asio::io_service& ios);
 
     boost::asio::ip::tcp::socket& GetSocket();
+
+    bool IsOpen() const;
+    void Disconnect();
+
+protected:
+    boost::asio::io_service& GetIoService();
 
 private:
     boost::asio::ip::tcp::socket m_socket;

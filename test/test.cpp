@@ -1,14 +1,13 @@
 #define BOOST_TEST_MODULE SimpleTests
 #include <boost/test/unit_test.hpp>
+#include <boost/bind.hpp>
 #include <thread>
 #include <future>
+#include <fstream>
 #include <functional>
 
 #include "serverlib/server.h"
-
-BOOST_AUTO_TEST_CASE(Nothing)
-{
-}
+#include "clientlib/client.h"
 
 BOOST_AUTO_TEST_CASE(SpawnServer)
 {
@@ -36,4 +35,54 @@ BOOST_AUTO_TEST_CASE(SpawnServer)
     socket.close();
     BOOST_CHECK(!error);
     thread.join();
+}
+
+struct CreateServer
+{
+    ~CreateServer()
+    {
+        server.ios.stop();
+        server.thread.join();
+    }
+
+    struct _Server
+    {
+        _Server() : instance(ios)
+        {
+            BOOST_CHECK(instance.StartListening(12345));
+            auto bind = boost::bind(&boost::asio::io_service::run, &ios);
+            thread = std::thread(bind);
+        }
+
+        std::thread thread;
+        boost::asio::io_service ios;
+        Server instance;
+    } server;
+
+    struct _Client
+    {
+        _Client() : instance(ios)
+        {
+            instance.Connect("localhost", 12345);
+        }
+        boost::asio::io_service ios;
+        Client instance;
+    } client;
+};
+
+BOOST_FIXTURE_TEST_CASE(ConnectDisconnect, CreateServer)
+{
+    BOOST_CHECK(client.instance.IsOpen());
+    client.instance.Disconnect();
+    BOOST_CHECK(!client.instance.IsOpen());
+}
+
+BOOST_FIXTURE_TEST_CASE(FilterFile, CreateServer)
+{
+    BOOST_CHECK(client.instance.IsOpen());
+    std::fstream stream("logs/sample.log");
+    BOOST_REQUIRE(stream.is_open());
+    BOOST_CHECK(client.instance.Filter(stream));
+    client.instance.Disconnect();
+    BOOST_CHECK(!client.instance.IsOpen());
 }

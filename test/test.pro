@@ -19,5 +19,6 @@ win32 {
 LIBS += -L../lib
 LIBS += -lnetworklib
 LIBS += -lserverlib
+LIBS += -lclientlib
 
 SOURCES += $$files(*.cpp)

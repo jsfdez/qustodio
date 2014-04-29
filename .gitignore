@@ -9,3 +9,4 @@ Makefile
 *.*sdf
 *.suo
 qmake.bat
+Makefile.*
