@@ -44,17 +44,3 @@ void Server::HandleAccept(const boost::system::error_code& ec)
     }
 }
 
-Server::Connection* Server::Connection::Create(boost::asio::io_service& ios)
-{
-    return new Connection(ios);
-}
-
-boost::asio::ip::tcp::socket&Server::Connection::GetSocket()
-{
-    return m_socket;
-}
-
-Server::Connection::Connection(boost::asio::io_service& ios)
-    : m_socket(ios)
-{
-}

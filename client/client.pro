@@ -13,4 +13,5 @@ DESTDIR = ../bin
     QMAKE_CXXFLAGS += -EHsc
 }
 
-SOURCES += client_main.cpp
+HEADERS += $$files(*.h)
+SOURCES += $$files(*.cpp)

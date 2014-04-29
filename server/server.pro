@@ -18,9 +18,10 @@ win32 {
     DEFINES += _WIN32_WINNT=0x0600
 }
 
-#LIBS += -lboost_system
 LIBS += -lnetworklib
+LIBS += -lserverlib
 
 DEFINES += PORT=42422
 
-SOURCES += server_main.cpp
+HEADERS += $$files(*.h)
+SOURCES += $$files(*.cpp)

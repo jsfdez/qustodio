@@ -5,24 +5,11 @@
 #include <boost/asio.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
+#include "networklib/connection.h"
+
 class Server
 {
 public:
-    class Connection
-    {
-    public:
-		Connection(boost::asio::io_service& ios);
-
-		typedef std::shared_ptr<Connection> Pointer;
-
-        static Connection* Create(boost::asio::io_service& ios);
-
-        boost::asio::ip::tcp::socket& GetSocket();
-    
-	private:
-        boost::asio::ip::tcp::socket m_socket;
-    };
-
     Server(boost::asio::io_service& ios);
 
     bool StartListening(uint16_t port);
@@ -37,6 +24,5 @@ private:
     std::vector<Connection::Pointer> m_connections;
     Connection::Pointer m_pendingConnection;
 };
-
 
 #endif

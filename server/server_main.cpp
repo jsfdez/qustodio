@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <functional>
 
-#include "networklib/server.h"
+#include "serverlib/server.h"
 
 int main(int argc, char** argv)
 {

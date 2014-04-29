@@ -4,7 +4,7 @@
 #include <future>
 #include <functional>
 
-#include "networklib/server.h"
+#include "serverlib/server.h"
 
 BOOST_AUTO_TEST_CASE(Nothing)
 {

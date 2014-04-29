@@ -3,3 +3,9 @@ lib
 .o
 *.user
 Makefile
+*.vcxproj
+*.filters
+*.sln
+*.*sdf
+*.suo
+qmake.bat

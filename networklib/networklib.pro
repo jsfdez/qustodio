@@ -17,5 +17,5 @@ win32 {
     QMAKE_CXXFLAGS += -std=c++11
 }
 
-HEADERS += server.h
-SOURCES += server.cpp
+HEADERS += $$files(*.h)
+SOURCES += $$files(*.cpp)
