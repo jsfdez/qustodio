@@ -10,3 +10,4 @@ Makefile
 *.suo
 qmake.bat
 Makefile.*
+*.*~

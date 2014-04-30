@@ -1,3 +1,5 @@
+include(../common.pri)
+
 TEMPLATE = app
 
 CONFIG -= qt
@@ -11,12 +13,6 @@ DESTDIR = ../bin
 INCLUDEPATH += ..
 
 LIBS += -L../lib
-
-win32 {
-    INCLUDEPATH += $$(BOOST_PATH)
-    LIBS += -L$$(BOOST_PATH)/stage/lib
-    DEFINES += _WIN32_WINNT=0x0600
-}
 
 LIBS += -lnetworklib
 LIBS += -lserverlib

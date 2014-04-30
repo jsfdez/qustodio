@@ -14,6 +14,9 @@ public:
     bool IsOpen() const;
     void Disconnect();
 
+	void PrepareToRead();
+	void Write();
+
 protected:
     boost::asio::io_service& GetIoService();
 
