@@ -21,6 +21,18 @@ public:
 
     bool Filter(std::istream& stream);
 
+    QuestionableActivityFoundSignal& GetQuestionableActivityFoundSignal();
+
+    Client& AddOffendingWord(const std::string& word);
+    size_t OffendingWordCount();
+    std::string GetOffendingWord(size_t index) const;
+    Client& RemoveOffendingWord(size_t index);
+
+protected:
+    void UpdateFilterExpression();
+
 private:
     QuestionableActivityFoundSignal m_questionableActivityFound;
+    std::vector<std::string> m_offendingWords;
+    std::string m_filterExpression;
 };

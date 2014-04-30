@@ -1,7 +1,8 @@
 #include "client.h"
 
-#include <boost/lexical_cast.hpp>
 #include <regex>
+#include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string/join.hpp>
 
 std::istream& operator>>(std::istream &is, Client::Activity &a)
 {
@@ -58,7 +59,7 @@ bool Client::Filter(std::istream &stream)
             std::cerr << "Parse error" << std::endl;
             return false;
         }
-        std::regex rx("porn", std::regex_constants::icase);
+        std::regex rx(m_filterExpression, std::regex_constants::icase);
         if (std::regex_search(activity.url.begin(),
                               activity.url.end(), rx))
         {
@@ -66,4 +67,24 @@ bool Client::Filter(std::istream &stream)
         }
     }
     return true;
+}
+
+Client::QuestionableActivityFoundSignal &Client::GetQuestionableActivityFoundSignal()
+{
+    return m_questionableActivityFound;
+}
+
+Client& Client::AddOffendingWord(const std::string &word)
+{
+    if (!word.empty())
+    {
+        m_offendingWords.push_back(word);
+        UpdateFilterExpression();
+    }
+    return *this;
+}
+
+void Client::UpdateFilterExpression()
+{
+    m_filterExpression = boost::algorithm::join(m_offendingWords, "|");
 }

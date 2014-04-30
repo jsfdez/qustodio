@@ -79,10 +79,20 @@ BOOST_FIXTURE_TEST_CASE(ConnectDisconnect, CreateServer)
 
 BOOST_FIXTURE_TEST_CASE(FilterFile, CreateServer)
 {
+    bool found = false;
+    std::function<void(const Client::Activity& activity)> callback = [&found](
+            const Client::Activity&)
+    {
+        found = true;
+    };
     BOOST_CHECK(client.instance.IsOpen());
+    client.instance.AddOffendingWord("porn").AddOffendingWord("xxx")
+            .AddOffendingWord("sex").AddOffendingWord("Bieber");
+    client.instance.GetQuestionableActivityFoundSignal().connect(callback);
     std::fstream stream("logs/sample.log");
     BOOST_REQUIRE(stream.is_open());
     BOOST_CHECK(client.instance.Filter(stream));
+    BOOST_CHECK(found);
     client.instance.Disconnect();
     BOOST_CHECK(!client.instance.IsOpen());
 }
