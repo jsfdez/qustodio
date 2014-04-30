@@ -5,10 +5,13 @@
 #include <boost/algorithm/string/join.hpp>
 
 #include "rapidjson/document.h"
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/prettywriter.h"
+
+#define STRINGIFY(arg) #arg
 
 std::istream& operator>>(std::istream &is, Client::Activity &a)
 {
-//    is >> a.address >> a.url >> a.timestamp;
     std::string key;
     is >> key >> a.address;
     if (key != "device:")
@@ -31,6 +34,8 @@ std::istream& operator>>(std::istream &is, Client::Activity &a)
 Client::Client(boost::asio::io_service& ios)
     : Connection(ios)
 {
+	m_questionableActivityFound.connect(std::bind(&Client::SendQuestionableActivity, this, 
+		std::placeholders::_1));
 }
 
 bool Client::Connect(const std::string& host, uint16_t port)
@@ -102,7 +107,21 @@ void Client::SendQuestionableActivity(const Activity& activity)
 	address.SetString(activity.address.c_str(), document.GetAllocator());
 	url.SetString(activity.url.c_str(), document.GetAllocator());
 	timestamp.SetUint64(activity.timestamp);
-	//document.AddMember("address", activity.address.c_str(), document.GetAllocator());
-	//document.AddMember("url", activity.url.c_str(), document.GetAllocator());
-	//document.AddMember("timestamp", );
+	document.AddMember(STRINGIFY(address), address, document.GetAllocator());
+	document.AddMember(STRINGIFY(url), url, document.GetAllocator());
+	document.AddMember(STRINGIFY(timestamp), timestamp, document.GetAllocator());
+
+	rapidjson::StringBuffer buffer;
+	rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
+	document.Accept(writer);
+	buffer.Put('\0');
+	
+	boost::system::error_code ec;
+	boost::asio::write(GetSocket(), boost::asio::buffer(buffer.GetString(), buffer.Size()), 
+		ec);
+	if (!ec)
+	{
+		Disconnect();
+		return;
+	}
 }
