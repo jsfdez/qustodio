@@ -12,7 +12,7 @@ public:
         time_t timestamp;
     };
 
-    typedef boost::signals2::signal<void(Activity)>
+    typedef boost::signals2::signal<void(const Activity&)>
         QuestionableActivityFoundSignal;
 
     Client(boost::asio::io_service& ios);
@@ -32,6 +32,8 @@ protected:
     void UpdateFilterExpression();
 
 private:
+	void SendQuestionableActivity(const Activity& activity);
+
     QuestionableActivityFoundSignal m_questionableActivityFound;
     std::vector<std::string> m_offendingWords;
     std::string m_filterExpression;
