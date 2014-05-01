@@ -24,6 +24,6 @@ std::istream& operator>>(std::istream &is, Activity &a)
 std::ostream& operator<<(std::ostream &os, const Activity &a)
 {
     os << "{address: " << a.address << ", url: " << a.url << ", timestamp: "
-       << a.timestamp << std::endl;
+        << a.timestamp << "}" << std::endl;
     return os;
 }

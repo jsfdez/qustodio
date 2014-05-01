@@ -13,11 +13,6 @@ Server::Server(boost::asio::io_service& ios)
     : m_ios(ios)
     , m_acceptor(m_ios)
     , m_activityCount(0)
-    , m_closing(false)
-    , m_showActivitiesThread(std::bind(&Server::ShowActivities, this))
-{
-    m_questionableActivityReceivedSignal.connect(std::bind(&Server::AddActivity,
-        this, std::placeholders::_1));
 }
 
 Server::~Server()
@@ -27,8 +22,6 @@ Server::~Server()
         if (thread->joinable())
             thread->join();
     }
-    m_closing = true;
-    m_showActivitiesThread.join();
 }
 
 std::uint32_t Server::GetActivityCount() const
@@ -100,18 +93,4 @@ void Server::HandleConnection(Connection::Pointer connection)
         // Error or EOF handling
         connection->Disconnect();
     }
-}
-
-void Server::ShowActivities()
-{
-    while(!m_closing)
-    {
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-    }
-}
-
-void Server::AddActivity(const Activity &activity)
-{
-    std::lock_guard<std::mutex> lg(m_activitiesQueueMutex);
-    m_activitiesQueue.push(std::make_pair(activity, 0));
 }
