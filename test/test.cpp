@@ -49,7 +49,7 @@ struct CreateServer
     {
         _Server() : instance(ios)
         {
-            BOOST_CHECK(instance.StartListening(12345));
+            BOOST_CHECK(instance.StartListening(PORT));
             auto bind = boost::bind(&boost::asio::io_service::run, &ios);
             thread = std::thread(bind);
         }
@@ -63,7 +63,7 @@ struct CreateServer
     {
         _Client() : instance(ios)
         {
-            instance.Connect("localhost", 12345);
+            instance.Connect("localhost", PORT);
         }
         boost::asio::io_service ios;
         Client instance;

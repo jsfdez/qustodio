@@ -13,15 +13,7 @@ Server::Server(boost::asio::io_service& ios)
     : m_ios(ios)
     , m_acceptor(m_ios)
     , m_activityCount(0)
-}
-
-Server::~Server()
 {
-    for (ThreadPointer& thread : m_threads)
-    {
-        if (thread->joinable())
-            thread->join();
-    }
 }
 
 std::uint32_t Server::GetActivityCount() const
@@ -68,7 +60,8 @@ void Server::HandleAccept(const boost::system::error_code& ec)
     {
         auto function = std::bind(&Server::HandleConnection, this,
             m_pendingConnection);
-        m_threads.emplace_back(new std::thread(function));
+        std::thread(function).detach();
+        //m_threads.emplace_back(new std::thread(function));
         AsyncAccept();
     }
 }

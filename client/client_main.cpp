@@ -45,9 +45,10 @@ int main(int argc, char** argv)
                 std::placeholders::_1));
         client.GetServerAnswerReceivedSignal().connect(std::bind(
             &ServerAnswer, std::placeholders::_1, std::placeholders::_2));
-        if(client.Connect("localhost", PORT))
+        if(!client.Connect("localhost", PORT))
         {
             std::cout << "Server not found" << std::endl;
+            return EXIT_FAILURE;
         }
         for (int i = 1; i < argc; i++)
         {

@@ -19,7 +19,6 @@ public:
         QuestionableActivityReceivedSignal;
 
     Server(boost::asio::io_service& ios);
-    ~Server();
 
     std::uint32_t GetActivityCount() const;
 
