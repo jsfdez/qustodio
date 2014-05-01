@@ -7,15 +7,15 @@ CONFIG -= qt
 QT =
 
 # Directories
-SUBDIRS += networklib
+SUBDIRS += commonlib
 SUBDIRS += serverlib
 SUBDIRS += clientlib
 SUBDIRS += server
 SUBDIRS += client
 SUBDIRS += test
 
-serverlib.depends = networklib
-clientlib.depends = networklib
+serverlib.depends = commonlib
+clientlib.depends = commonlib
 server.depends = serverlib
 client.depends = clientlib
 test.depends += serverlib

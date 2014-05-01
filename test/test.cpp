@@ -91,7 +91,6 @@ BOOST_FIXTURE_TEST_CASE(FilterFile, CreateServer)
     {
         received = true;
     };
-//    std::function<void(ServerMessageType, std::uint32_t)> clientNotification =
     BOOST_CHECK(client.instance.IsOpen());
     client.instance.AddOffendingWord("porn").AddOffendingWord("xxx")
             .AddOffendingWord("sex").AddOffendingWord("Bieber");

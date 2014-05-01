@@ -13,11 +13,8 @@ DESTDIR = ../bin
 INCLUDEPATH += ..
 
 LIBS += -L../lib
-
-LIBS += -lnetworklib
+LIBS += -lcommonlib
 LIBS += -lserverlib
-
-DEFINES += PORT=42422
 
 HEADERS += $$files(*.h)
 SOURCES += $$files(*.cpp)

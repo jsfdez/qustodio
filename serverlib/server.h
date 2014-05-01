@@ -2,14 +2,16 @@
 #define SERVER_H
 
 #include <list>
+#include <mutex>
+#include <queue>
 #include <thread>
 #include <atomic>
 #include <stdint.h>
 #include <boost/asio.hpp>
 #include <boost/signals2.hpp>
 
-#include "networklib/message.h"
-#include "networklib/connection.h"
+#include "commonlib/message.h"
+#include "commonlib/connection.h"
 
 class Server
 {
@@ -35,13 +37,20 @@ private:
 
     void HandleConnection(Connection::Pointer connection);
 
+    void ShowActivities();
+
+    void AddActivity(const Message::Activity& activity);
+
     boost::asio::io_service& m_ios;
     boost::asio::ip::tcp::acceptor m_acceptor;
-    std::vector<Connection::Pointer> m_connections;
     std::list<ThreadPointer> m_threads;
     Connection::Pointer m_pendingConnection;
     QuestionableActivityReceivedSignal m_questionableActivityReceivedSignal;
     std::atomic_uint32_t m_activityCount;
+    std::atomic<bool> m_closing;
+    std::thread m_showActivitiesThread;
+    std::mutex m_activitiesQueueMutex;
+    std::queue<std::pair<Message::Activity,uint8_t>> m_activitiesQueue;
 };
 
 #endif

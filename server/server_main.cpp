@@ -4,7 +4,7 @@
 
 #include "serverlib/server.h"
 
-int main(int argc, char** argv)
+int main(int, char**)
 {
     boost::asio::io_service ios;
     boost::asio::io_service::work work(ios);

@@ -10,11 +10,16 @@ QT =
 OBJECTS_DIR = .o
 DESTDIR = ../bin
 
-!win32 {
-    LIBS += -L../lib
-} else {
+INCLUDEPATH += ..
+
+win32 {
     QMAKE_CXXFLAGS += -EHsc
 }
+
+LIBS += -L../lib
+LIBS += -lcommonlib
+LIBS += -lclientlib
+
 
 HEADERS += $$files(*.h)
 SOURCES += $$files(*.cpp)

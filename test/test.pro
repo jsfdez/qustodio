@@ -13,7 +13,7 @@ OBJECTS_DIR = .o
 INCLUDEPATH += ..
 
 LIBS += -L../lib
-LIBS += -lnetworklib
+LIBS += -lcommonlib
 LIBS += -lserverlib
 LIBS += -lclientlib
 

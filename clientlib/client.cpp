@@ -4,7 +4,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string/join.hpp>
 
-#include "networklib/message.h"
+#include "commonlib/message.h"
 
 std::istream& operator>>(std::istream &is, Message::Activity &a)
 {

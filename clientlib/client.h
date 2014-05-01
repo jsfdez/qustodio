@@ -2,8 +2,8 @@
 
 #include <boost/signals2.hpp>
 
-#include "networklib/message.h"
-#include "networklib/connection.h"
+#include "commonlib/message.h"
+#include "commonlib/connection.h"
 
 class Client : public Connection
 {
