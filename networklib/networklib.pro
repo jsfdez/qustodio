@@ -5,7 +5,8 @@ CONFIG += staticlib
 
 OBJECTS_DIR = .o
 DESTDIR = ../lib
-INCLUDEPATH += .
+
+INCLUDEPATH += ../3rdParty/rapidjson/include
 
 win32 {
     INCLUDEPATH += $$(BOOST_PATH)

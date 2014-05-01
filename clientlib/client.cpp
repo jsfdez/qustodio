@@ -4,13 +4,9 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string/join.hpp>
 
-#include "rapidjson/document.h"
-#include "rapidjson/stringbuffer.h"
-#include "rapidjson/prettywriter.h"
+#include "networklib/message.h"
 
-#define STRINGIFY(arg) #arg
-
-std::istream& operator>>(std::istream &is, Client::Activity &a)
+std::istream& operator>>(std::istream &is, Message::Activity &a)
 {
     std::string key;
     is >> key >> a.address;
@@ -57,7 +53,7 @@ bool Client::Filter(std::istream &stream)
 {
     while(!stream.eof())
     {
-        Activity activity;
+        Message::Activity activity;
         stream >> activity;
         if (stream.eof())
             return true;
@@ -96,32 +92,11 @@ void Client::UpdateFilterExpression()
     m_filterExpression = boost::algorithm::join(m_offendingWords, "|");
 }
 
-void Client::SendQuestionableActivity(const Activity& activity)
+void Client::SendQuestionableActivity(const Message::Activity& activity)
 {
 	if (!IsOpen())
 		return;
 
-	rapidjson::Document document;
-	rapidjson::Value address, url, timestamp;
-	document.SetObject();
-	address.SetString(activity.address.c_str(), document.GetAllocator());
-	url.SetString(activity.url.c_str(), document.GetAllocator());
-	timestamp.SetUint64(activity.timestamp);
-	document.AddMember(STRINGIFY(address), address, document.GetAllocator());
-	document.AddMember(STRINGIFY(url), url, document.GetAllocator());
-	document.AddMember(STRINGIFY(timestamp), timestamp, document.GetAllocator());
-
-	rapidjson::StringBuffer buffer;
-	rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
-	document.Accept(writer);
-	buffer.Put('\0');
-	
-	boost::system::error_code ec;
-	boost::asio::write(GetSocket(), boost::asio::buffer(buffer.GetString(), buffer.Size()), 
-		ec);
-	if (!ec)
-	{
-		Disconnect();
-		return;
-	}
+    Message message(activity);
+    message.Send(GetSocket());
 }

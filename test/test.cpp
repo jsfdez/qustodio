@@ -80,8 +80,8 @@ BOOST_FIXTURE_TEST_CASE(ConnectDisconnect, CreateServer)
 BOOST_FIXTURE_TEST_CASE(FilterFile, CreateServer)
 {
     bool found = false;
-    std::function<void(const Client::Activity& activity)> callback = [&found](
-            const Client::Activity&)
+    std::function<void(const Message::Activity& activity)> callback = [&found](
+            const Message::Activity&)
     {
         found = true;
     };

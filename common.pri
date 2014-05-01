@@ -15,6 +15,11 @@ win32 {
     DEFINES += _WIN32_WINNT=0x0600
 }
 
+CONFIG -= qt
+QT =
+
 export(INCLUDEPATH)
 export(LIBS)
 export(DEFINES)
+export(CONFIG)
+export(QT)

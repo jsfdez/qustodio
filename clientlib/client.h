@@ -1,18 +1,14 @@
 #pragma once
 
-#include "networklib/connection.h"
 #include <boost/signals2.hpp>
+
+#include "networklib/message.h"
+#include "networklib/connection.h"
 
 class Client : public Connection
 {
 public:
-    struct Activity {
-        std::string address;
-        std::string url;
-        time_t timestamp;
-    };
-
-    typedef boost::signals2::signal<void(const Activity&)>
+    typedef boost::signals2::signal<void(const Message::Activity&)>
         QuestionableActivityFoundSignal;
 
     Client(boost::asio::io_service& ios);
@@ -32,7 +28,7 @@ protected:
     void UpdateFilterExpression();
 
 private:
-	void SendQuestionableActivity(const Activity& activity);
+    void SendQuestionableActivity(const Message::Activity& activity);
 
     QuestionableActivityFoundSignal m_questionableActivityFound;
     std::vector<std::string> m_offendingWords;

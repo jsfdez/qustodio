@@ -12,3 +12,4 @@ qmake.bat
 Makefile.*
 *.*~
 *.bat
+*.autosave  

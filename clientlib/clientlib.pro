@@ -3,6 +3,7 @@ include(../common.pri)
 TEMPLATE = lib
 QT =
 CONFIG += staticlib
+CONFIG -= qt
 OBJECTS_DIR = .o
 DESTDIR = ../lib
 INCLUDEPATH += ..

@@ -2,11 +2,23 @@
 
 #include <boost/bind.hpp>
 #include <boost/make_shared.hpp>
+#include <boost/exception/all.hpp>
+
+#include "rapidjson/document.h"
+#include "networklib/message.h"
 
 Server::Server(boost::asio::io_service& ios)
-    : m_ios(ios)
-    , m_acceptor(m_ios)
+: m_ios(ios)
+, m_acceptor(m_ios)
+{}
+
+Server::~Server()
 {
+    for (ThreadPointer& thread : m_threads)
+    {
+        if (thread->joinable())
+            thread->join();
+    }
 }
 
 bool Server::StartListening(uint16_t port)
@@ -39,8 +51,28 @@ void Server::HandleAccept(const boost::system::error_code& ec)
 {
     if (!ec)
     {
-        m_connections.push_back(m_pendingConnection);
+        auto function = std::bind(&Server::HandleConnection, this,
+            m_pendingConnection);
+        m_threads.emplace_back(new std::thread(function));
         AsyncAccept();
     }
 }
 
+void Server::HandleConnection(Connection::Pointer connection)
+{
+    try
+    {
+        for (;;)
+        {
+            Message message;
+            message.Receive(connection->GetSocket());
+            message.SetType(Message::Type::ACKNOWLEDGE);
+
+        }
+    }
+    catch (boost::system::system_error&)
+    {
+        // Error or EOF handling
+        connection->Disconnect();
+    }
+}
