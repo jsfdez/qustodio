@@ -59,7 +59,8 @@ int main(int, char**)
         ios.run();
         if(thread.joinable())
             thread.join();
+        return EXIT_SUCCESS;
     }
-
-    return EXIT_SUCCESS;
+    std::cout << "Port already in use" << std::endl;
+    return EXIT_FAILURE;
 }
