@@ -10,7 +10,7 @@ INCLUDEPATH += ..
 INCLUDEPATH += ../3rdParty/rapidjson/include
 
 LIBS += -L../lib
-LIBS += -lnetworklib
+LIBS += -lcommonlib
 
 HEADERS += $$files(*.h)
 SOURCES += $$files(*.cpp)

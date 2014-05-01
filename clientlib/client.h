@@ -14,7 +14,7 @@ public:
         NOT_STORED = Message::Type::NOT_STORED
     };
 
-    typedef boost::signals2::signal<void(const Message::Activity&)> QuestionableActivityFoundSignal;
+    typedef boost::signals2::signal<void(const Activity&)> QuestionableActivityFoundSignal;
     typedef boost::signals2::signal<void(ServerMessageType, std::uint32_t)> ServerAnswerReceivedSignal;
 
     Client(boost::asio::io_service& ios);
@@ -35,7 +35,7 @@ protected:
     void UpdateFilterExpression();
 
 private:
-    void SendQuestionableActivity(const Message::Activity& activity);
+    void SendQuestionableActivity(const Activity& activity);
 
     std::vector<std::string> m_offendingWords;
     std::string m_filterExpression;

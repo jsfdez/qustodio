@@ -20,5 +20,7 @@ win32 {
     QMAKE_CXXFLAGS += -std=c++11
 }
 
-HEADERS += $$files(*.h)
-SOURCES += $$files(*.cpp)
+HEADERS += $$files(*.h) \
+    activity.h
+SOURCES += $$files(*.cpp) \
+    activity.cpp

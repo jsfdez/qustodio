@@ -4,7 +4,7 @@
 
 #include "clientlib/client.h"
 
-void QuestionableActivityFound(const Message::Activity& activity)
+void QuestionableActivityFound(const Activity& activity)
 {
     time_t t = activity.timestamp;
     struct tm *tm = localtime(&t);

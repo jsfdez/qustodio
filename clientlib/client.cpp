@@ -5,27 +5,7 @@
 #include <boost/algorithm/string/join.hpp>
 
 #include "commonlib/message.h"
-
-std::istream& operator>>(std::istream &is, Message::Activity &a)
-{
-    std::string key;
-    is >> key >> a.address;
-    if (key != "device:")
-    {
-        is.setf(std::ios_base::failbit);
-        return is;
-    }
-    is >> key >> a.url;
-    if (key != "url:")
-    {
-        is.setf(std::ios_base::failbit);
-        return is;
-    }
-    is >> key >> a.timestamp;
-    if (key != "timestamp:")
-        is.setf(std::ios_base::failbit);
-    return is;
-}
+#include "commonlib/activity.h"
 
 Client::Client(boost::asio::io_service& ios)
     : Connection(ios)
@@ -53,7 +33,7 @@ bool Client::Filter(std::istream &stream)
 {
     while(!stream.eof())
     {
-        Message::Activity activity;
+        Activity activity;
         stream >> activity;
         if (stream.eof())
             return true;
@@ -97,7 +77,7 @@ void Client::UpdateFilterExpression()
     m_filterExpression = boost::algorithm::join(m_offendingWords, "|");
 }
 
-void Client::SendQuestionableActivity(const Message::Activity& activity)
+void Client::SendQuestionableActivity(const Activity& activity)
 {
 	if (!IsOpen())
 		return;

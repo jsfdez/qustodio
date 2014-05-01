@@ -16,7 +16,7 @@
 class Server
 {
 public:
-    typedef boost::signals2::signal<void(const Message::Activity&)>
+    typedef boost::signals2::signal<void(const Activity&)>
         QuestionableActivityReceivedSignal;
 
     Server(boost::asio::io_service& ios);
@@ -39,7 +39,7 @@ private:
 
     void ShowActivities();
 
-    void AddActivity(const Message::Activity& activity);
+    void AddActivity(const Activity& activity);
 
     boost::asio::io_service& m_ios;
     boost::asio::ip::tcp::acceptor m_acceptor;
@@ -50,7 +50,7 @@ private:
     std::atomic<bool> m_closing;
     std::thread m_showActivitiesThread;
     std::mutex m_activitiesQueueMutex;
-    std::queue<std::pair<Message::Activity,uint8_t>> m_activitiesQueue;
+    std::queue<std::pair<Activity,uint8_t>> m_activitiesQueue;
 };
 
 #endif

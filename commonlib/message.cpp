@@ -41,7 +41,7 @@ Message::Message()
 {
 }
 
-Message::Message(const Message::Activity &activity)
+Message::Message(const Activity &activity)
     : m_private(new Private)
 {
     rapidjson::Value address, url, timestamp, type;
@@ -108,7 +108,7 @@ void Message::SetType(Message::Type type)
     (*m_private)[k_typeKey].SetString(data);
 }
 
-Message::Activity Message::GetActivity() const
+Activity Message::GetActivity() const
 {
     Activity activity;
     activity.address = GetAddress();

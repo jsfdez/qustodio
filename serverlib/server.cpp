@@ -110,7 +110,7 @@ void Server::ShowActivities()
     }
 }
 
-void Server::AddActivity(const Message::Activity &activity)
+void Server::AddActivity(const Activity &activity)
 {
     std::lock_guard<std::mutex> lg(m_activitiesQueueMutex);
     m_activitiesQueue.push(std::make_pair(activity, 0));

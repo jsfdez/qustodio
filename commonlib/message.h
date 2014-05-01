@@ -5,6 +5,8 @@
 #include <boost/asio.hpp>
 #include <boost/optional.hpp>
 
+#include "activity.h"
+
 class Message
 {
 public:
@@ -15,13 +17,6 @@ public:
         NOT_STORED,
 
         INVALID
-    };
-
-    struct Activity
-    {
-        std::string address;
-        std::string url;
-        time_t timestamp;
     };
 
     Message();

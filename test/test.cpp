@@ -81,13 +81,13 @@ BOOST_FIXTURE_TEST_CASE(FilterFile, CreateServer)
 {
     bool found = false, received = false, serverAnswer = false;
 
-    std::function<void(const Message::Activity&)> clientCallback = [&found](
-        const Message::Activity&)
+    std::function<void(const Activity&)> clientCallback = [&found](
+        const Activity&)
     {
         found = true;
     };
-    std::function<void(const Message::Activity&)> serverCallback = [&received](
-        const Message::Activity&)
+    std::function<void(const Activity&)> serverCallback = [&received](
+        const Activity&)
     {
         received = true;
     };
