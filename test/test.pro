@@ -1,4 +1,5 @@
 include(../common.pri)
+
 TEMPLATE = app
 
 CONFIG -= qt

@@ -13,6 +13,7 @@ static const char* k_typeKey = "type";
 static const char* k_addressKey = "address";
 static const char* k_urlKey = "url";
 static const char* k_timestampKey = "timestamp";
+static const char* k_activityCountKey = "activity_count";
 static const char k_eof = '\0';
 
 struct Message::Private : rapidjson::Document
@@ -20,6 +21,18 @@ struct Message::Private : rapidjson::Document
     Private() 
     {
         SetObject();
+    }
+
+    boost::optional<ValueType&> FindMember(const char* name)
+    {
+        for (Private::MemberIterator it = MemberBegin(); it != MemberEnd(); it++)
+        {
+            if (strcmp(it->name.GetString(), name) == 0)
+            {
+                return it->value;
+            }
+        }
+        return boost::none;
     }
 };
 
@@ -60,10 +73,11 @@ bool Message::IsValid() const
 Message::Type Message::GetType() const
 {
     static std::vector<std::string> strings =
-    {{
+    {
         STRINGIFY(Type::QUESTIONABLE_ACTIVITY_FOUND),
-        STRINGIFY(Type::ACKNOWLEDGE)
-    }};
+        STRINGIFY(Type::STORED),
+        STRINGIFY(Type::NOT_STORED)
+    };
 
     auto it = std::find(strings.cbegin(), strings.cend(),
                         (*m_private)[k_typeKey].GetString());
@@ -81,13 +95,26 @@ void Message::SetType(Message::Type type)
     case Type::QUESTIONABLE_ACTIVITY_FOUND:
         data = STRINGIFY(Type::QUESTIONABLE_ACTIVITY_FOUND);
         break;
-    case Type::ACKNOWLEDGE:
-        data = STRINGIFY(Type::ACKNOWLEDGE);
+    case Type::STORED:
+        data = STRINGIFY(Type::STORED);
+        break;
+    case Type::NOT_STORED:
+        data = STRINGIFY(Type::NOT_STORED);
         break;
     case Type::INVALID:
         assert(false);
         break;
     }
+    (*m_private)[k_typeKey].SetString(data);
+}
+
+Message::Activity Message::GetActivity() const
+{
+    Activity activity;
+    activity.address = GetAddress();
+    activity.url = GetUrl();
+    activity.timestamp = GetTimestamp();
+    return activity;
 }
 
 std::string Message::GetAddress() const
@@ -103,6 +130,28 @@ std::string Message::GetUrl() const
 time_t Message::GetTimestamp() const
 {
     return (*m_private)[k_timestampKey].GetInt64();
+}
+
+boost::optional<std::uint32_t> Message::GetActivityCount() const
+{
+    auto result = m_private->FindMember(k_activityCountKey);
+    if (result.is_initialized())
+        return result->GetUint();
+    return boost::none;
+}
+
+void Message::SetActivityCount(std::uint32_t count)
+{
+    auto result = m_private->FindMember(k_activityCountKey);
+    if(result.is_initialized())
+        result->SetUint(count);
+    else
+    {
+        rapidjson::Value value;
+        value.SetUint(count);
+        m_private->AddMember(k_activityCountKey, value,
+                             m_private->GetAllocator());
+    }
 }
 
 void Message::Serialize(std::string& data)

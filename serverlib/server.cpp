@@ -7,9 +7,12 @@
 #include "rapidjson/document.h"
 #include "networklib/message.h"
 
+#define FOREVER for(;;)
+
 Server::Server(boost::asio::io_service& ios)
-: m_ios(ios)
-, m_acceptor(m_ios)
+    : m_ios(ios)
+    , m_acceptor(m_ios)
+    , m_activityCount(0)
 {}
 
 Server::~Server()
@@ -19,6 +22,12 @@ Server::~Server()
         if (thread->joinable())
             thread->join();
     }
+}
+
+std::uint32_t Server::GetActivityCount() const
+{
+    uint32_t count = m_activityCount;
+    return count;
 }
 
 bool Server::StartListening(uint16_t port)
@@ -37,6 +46,12 @@ bool Server::StartListening(uint16_t port)
 
     AsyncAccept();
     return true;
+}
+
+Server::QuestionableActivityReceivedSignal& Server::
+    GetQuestionableActivityReceivedSignal()
+{
+    return m_questionableActivityReceivedSignal;
 }
 
 void Server::AsyncAccept()
@@ -62,12 +77,15 @@ void Server::HandleConnection(Connection::Pointer connection)
 {
     try
     {
-        for (;;)
+        FOREVER
         {
             Message message;
             message.Receive(connection->GetSocket());
-            message.SetType(Message::Type::ACKNOWLEDGE);
-
+            BOOST_ASSERT(message.GetType() == Message::Type::QUESTIONABLE_ACTIVITY_FOUND);
+            message.SetType(Message::Type::STORED); // NOT_STORED?!?!?
+            message.SetActivityCount(++m_activityCount);
+            m_questionableActivityReceivedSignal(message.GetActivity());
+            message.Send(connection->GetSocket());
         }
     }
     catch (boost::system::system_error&)

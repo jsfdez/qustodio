@@ -30,7 +30,7 @@ std::istream& operator>>(std::istream &is, Message::Activity &a)
 Client::Client(boost::asio::io_service& ios)
     : Connection(ios)
 {
-	m_questionableActivityFound.connect(std::bind(&Client::SendQuestionableActivity, this, 
+    m_questionableActivityFoundSignal.connect(std::bind(&Client::SendQuestionableActivity, this,
 		std::placeholders::_1));
 }
 
@@ -66,7 +66,7 @@ bool Client::Filter(std::istream &stream)
         if (std::regex_search(activity.url.begin(),
                               activity.url.end(), rx))
         {
-            m_questionableActivityFound(activity);
+            m_questionableActivityFoundSignal(activity);
         }
     }
     return true;
@@ -74,7 +74,12 @@ bool Client::Filter(std::istream &stream)
 
 Client::QuestionableActivityFoundSignal &Client::GetQuestionableActivityFoundSignal()
 {
-    return m_questionableActivityFound;
+    return m_questionableActivityFoundSignal;
+}
+
+Client::ServerAnswerReceivedSignal& Client::GetServerAnswerReceivedSignal()
+{
+    return m_serverAnswerReceivedSignal;
 }
 
 Client& Client::AddOffendingWord(const std::string &word)
@@ -98,5 +103,28 @@ void Client::SendQuestionableActivity(const Message::Activity& activity)
 		return;
 
     Message message(activity);
-    message.Send(GetSocket());
+    try 
+    {
+        message.Send(GetSocket());
+        message.Receive(GetSocket());
+        BOOST_ASSERT(message.GetActivityCount().is_initialized());
+        switch(message.GetType())
+        {
+        case Message::Type::STORED:
+        case Message::Type::NOT_STORED:
+            m_serverAnswerReceivedSignal(
+                static_cast<ServerMessageType>(message.GetType()), 
+                *message.GetActivityCount());
+            break;
+        case Message::Type::QUESTIONABLE_ACTIVITY_FOUND:
+        case Message::Type::INVALID:
+            BOOST_ASSERT(false);
+            break;
+        }
+    }
+    catch (boost::system::system_error&)
+    {
+        // Error or EOF handling
+        Disconnect();
+    }
 }

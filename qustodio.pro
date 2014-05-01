@@ -18,6 +18,7 @@ serverlib.depends = networklib
 clientlib.depends = networklib
 server.depends = serverlib
 client.depends = clientlib
-test.depends = serverlib clientlib
+test.depends += serverlib
+test.depends += clientlib
 
 OTHER_FILES += docs/sample.log

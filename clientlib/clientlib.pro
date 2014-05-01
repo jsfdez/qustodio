@@ -9,10 +9,6 @@ DESTDIR = ../lib
 INCLUDEPATH += ..
 INCLUDEPATH += ../3rdParty/rapidjson/include
 
-win32 {
-	DEFINES += _SCL_SECURE_NO_WARNINGS
-}
-
 LIBS += -L../lib
 LIBS += -lnetworklib
 

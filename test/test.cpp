@@ -79,20 +79,34 @@ BOOST_FIXTURE_TEST_CASE(ConnectDisconnect, CreateServer)
 
 BOOST_FIXTURE_TEST_CASE(FilterFile, CreateServer)
 {
-    bool found = false;
-    std::function<void(const Message::Activity& activity)> callback = [&found](
-            const Message::Activity&)
+    bool found = false, received = false, serverAnswer = false;
+
+    std::function<void(const Message::Activity&)> clientCallback = [&found](
+        const Message::Activity&)
     {
         found = true;
     };
+    std::function<void(const Message::Activity&)> serverCallback = [&received](
+        const Message::Activity&)
+    {
+        received = true;
+    };
+//    std::function<void(ServerMessageType, std::uint32_t)> clientNotification =
     BOOST_CHECK(client.instance.IsOpen());
     client.instance.AddOffendingWord("porn").AddOffendingWord("xxx")
             .AddOffendingWord("sex").AddOffendingWord("Bieber");
-    client.instance.GetQuestionableActivityFoundSignal().connect(callback);
+    client.instance.GetQuestionableActivityFoundSignal().connect(clientCallback);
+    server.instance.GetQuestionableActivityReceivedSignal().connect(serverCallback);
+    client.instance.GetServerAnswerReceivedSignal().connect([&serverAnswer](
+        Client::ServerMessageType, std::uint32_t)
+    {
+        serverAnswer = true;
+    });
     std::fstream stream("logs/sample.log");
     BOOST_REQUIRE(stream.is_open());
     BOOST_CHECK(client.instance.Filter(stream));
     BOOST_CHECK(found);
+    BOOST_CHECK(received);
     client.instance.Disconnect();
     BOOST_CHECK(!client.instance.IsOpen());
 }

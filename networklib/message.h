@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include <boost/asio.hpp>
+#include <boost/optional.hpp>
 
 class Message
 {
@@ -10,7 +11,8 @@ public:
     enum class Type
     {
         QUESTIONABLE_ACTIVITY_FOUND = 0,
-        ACKNOWLEDGE,
+        STORED,
+        NOT_STORED,
 
         INVALID
     };
@@ -30,9 +32,13 @@ public:
     Type GetType() const;
     void SetType(Type type);
 
+    Activity GetActivity() const;
+
     std::string GetAddress() const;
     std::string GetUrl() const;
     time_t GetTimestamp() const;
+    boost::optional<std::uint32_t> GetActivityCount() const;
+    void SetActivityCount(std::uint32_t count);
 
     size_t Send(boost::asio::ip::tcp::socket& socket);
     size_t Receive(boost::asio::ip::tcp::socket& socket);

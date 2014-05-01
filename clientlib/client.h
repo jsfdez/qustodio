@@ -8,8 +8,14 @@
 class Client : public Connection
 {
 public:
-    typedef boost::signals2::signal<void(const Message::Activity&)>
-        QuestionableActivityFoundSignal;
+    enum class ServerMessageType
+    {
+        STORED = Message::Type::STORED,
+        NOT_STORED = Message::Type::NOT_STORED
+    };
+
+    typedef boost::signals2::signal<void(const Message::Activity&)> QuestionableActivityFoundSignal;
+    typedef boost::signals2::signal<void(ServerMessageType, std::uint32_t)> ServerAnswerReceivedSignal;
 
     Client(boost::asio::io_service& ios);
 
@@ -18,6 +24,7 @@ public:
     bool Filter(std::istream& stream);
 
     QuestionableActivityFoundSignal& GetQuestionableActivityFoundSignal();
+    ServerAnswerReceivedSignal& GetServerAnswerReceivedSignal();
 
     Client& AddOffendingWord(const std::string& word);
     size_t OffendingWordCount();
@@ -30,7 +37,8 @@ protected:
 private:
     void SendQuestionableActivity(const Message::Activity& activity);
 
-    QuestionableActivityFoundSignal m_questionableActivityFound;
     std::vector<std::string> m_offendingWords;
     std::string m_filterExpression;
+    QuestionableActivityFoundSignal m_questionableActivityFoundSignal;
+    ServerAnswerReceivedSignal m_serverAnswerReceivedSignal;
 };
