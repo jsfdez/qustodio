@@ -19,6 +19,6 @@ qmake -tp vc -recursive
 
 ## Third party libraries used: ##
 * **Boost**: 
- * **Boost::asio**: Cross-platorform network library.
- * **Boost::test**: Cross-platform testing framework.
+  * **Boost::asio**: Cross-platorform network library.
+  * **Boost::test**: Cross-platform testing framework.
 * **Rapidjson**: Message parsing/formating. I used json format for extensibility.
