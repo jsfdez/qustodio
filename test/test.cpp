@@ -1,4 +1,8 @@
+#ifndef _WIN32
+#define BOOST_TEST_DYN_LINK
+#endif
 #define BOOST_TEST_MODULE SimpleTests
+
 #include <boost/test/unit_test.hpp>
 #include <boost/bind.hpp>
 #include <thread>

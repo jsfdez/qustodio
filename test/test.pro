@@ -16,5 +16,9 @@ LIBS += -L../lib
 LIBS += -lcommonlib
 LIBS += -lserverlib
 LIBS += -lclientlib
+!win32 {
+    LIBS += -lboost_unit_test_framework
+    LIBS += -lpthread
+}
 
 SOURCES += $$files(*.cpp)

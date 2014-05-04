@@ -3,7 +3,9 @@ include(../common.pri)
 TEMPLATE = lib
 
 QT =
-CONFIG += staticlib
+win32 {
+    CONFIG += staticlib
+}
 
 OBJECTS_DIR = .o
 DESTDIR = ../lib

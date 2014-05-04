@@ -40,7 +40,7 @@ private:
     std::list<ThreadPointer> m_threads;
     Connection::Pointer m_pendingConnection;
     QuestionableActivityReceivedSignal m_questionableActivityReceivedSignal;
-    std::atomic_uint32_t m_activityCount;
+    std::atomic<std::uint32_t> m_activityCount;
 };
 
 #endif

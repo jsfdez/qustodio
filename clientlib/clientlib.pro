@@ -2,7 +2,9 @@ include(../common.pri)
 
 TEMPLATE = lib
 QT =
-CONFIG += staticlib
+win32 {
+    CONFIG += staticlib
+}
 CONFIG -= qt
 OBJECTS_DIR = .o
 DESTDIR = ../lib

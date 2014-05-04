@@ -1,23 +1,26 @@
 #include "activity.h"
 
+#include <ios>
+#include <iostream>
+
 std::istream& operator>>(std::istream &is, Activity &a)
 {
     std::string key;
     is >> key >> a.address;
     if (key != "device:")
     {
-        is.setf(std::ios_base::failbit);
+        is.setstate(std::ios_base::failbit);
         return is;
     }
     is >> key >> a.url;
     if (key != "url:")
     {
-        is.setf(std::ios_base::failbit);
+        is.setstate(std::ios_base::failbit);
         return is;
     }
     is >> key >> a.timestamp;
     if (key != "timestamp:")
-        is.setf(std::ios_base::failbit);
+        is.setstate(std::ios_base::failbit);
     return is;
 }
 
