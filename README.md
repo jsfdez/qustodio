@@ -22,3 +22,6 @@ qmake -tp vc -recursive
   * **Boost::asio**: Cross-platorform network library.
   * **Boost::test**: Cross-platform testing framework.
 * **Rapidjson**: Message parsing/formating. I used json format for extensibility.
+
+## Tested in: ##
+* Visual Studio 2013 32bits @ Windows 8.1 64bits
