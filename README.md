@@ -27,3 +27,7 @@ qmake -tp vc -recursive
 * Visual Studio 2013 32bits @ Windows 8.1 64bits
 * gcc 4.9.0 64bits @ Archlinux 64bits
 * gcc 4.6.0 32bits @ SailfishOS
+
+## Running: ##
+To run the server only execute the server binary.
+To run the client simply: `server address log_file ...`
