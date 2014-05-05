@@ -25,3 +25,5 @@ qmake -tp vc -recursive
 
 ## Tested in: ##
 * Visual Studio 2013 32bits @ Windows 8.1 64bits
+* gcc 4.9.0 64bits @ Archlinux 64bits
+* gcc 4.6.0 32bits @ SailfishOS
