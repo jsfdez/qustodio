@@ -34,7 +34,7 @@ void ServerAnswer(Client::ServerMessageType result, std::uint32_t count)
 
 int main(int argc, char** argv)
 {
-    if(argc > 1)
+    if(argc > 2)
     {
         boost::asio::io_service ios;
         Client client(ios);
@@ -45,12 +45,12 @@ int main(int argc, char** argv)
                 std::placeholders::_1));
         client.GetServerAnswerReceivedSignal().connect(std::bind(
             &ServerAnswer, std::placeholders::_1, std::placeholders::_2));
-        if(!client.Connect("localhost", PORT))
+        if(!client.Connect(argv[1], PORT))
         {
             std::cout << "Server not found" << std::endl;
             return EXIT_FAILURE;
         }
-        for (int i = 1; i < argc; i++)
+        for (int i = 2; i < argc; i++)
         {
             std::fstream stream(argv[i]);
             if(!stream.is_open())
@@ -61,7 +61,9 @@ int main(int argc, char** argv)
             client.Filter(stream);
         }
     }
-    else
-        std::cout << "Please specify at least one input file" << std::endl;
+	else
+	{
+		std::cout << "Syntax: " << argv[0] << " address input_file..." << std::endl;
+	}
     return EXIT_SUCCESS;
 }
