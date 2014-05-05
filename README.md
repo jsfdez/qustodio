@@ -30,4 +30,4 @@ qmake -tp vc -recursive
 
 ## Running: ##
 To run the server only execute the server binary.
-To run the client simply: `server address log_file ...`
+To run the client: `client server_address log_file ...`
