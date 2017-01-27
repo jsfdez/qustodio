@@ -14,7 +14,7 @@ The client must be able to parse logs in the following format (see attached log
 
 le):
 ```
-device: 01-42--ae-3b-25
+device: 01-42-aa-ae-3b-25
 url: https://google.com/search?q=cars
 timestamp: 1397564362
 device: 45-60-bd-51-1e-fe
