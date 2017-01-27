@@ -9,7 +9,7 @@ activities found. Then it will terminate.
 The server will process each connection in a separate thread. An extra thread
 will be printing to the screen all the activities received during the last 5 seconds.
 
-# Router logs format
+# Router log format
 The client must be able to parse logs in the following format (see attached log
 
 le):
